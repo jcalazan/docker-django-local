@@ -3,7 +3,7 @@ MAINTAINER Jonathan Calazan "jonathan@calazan.com
 
 RUN locale-gen en_US.UTF-8
 
-RUN apt-get -qq update && DEBIAN_FRONTEND=noninteractive apt-get install -y -q \
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y -q \
     postgresql-9.1 \
     postgresql-contrib-9.1 \
     libpq-dev

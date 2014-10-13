@@ -3,9 +3,10 @@ MAINTAINER Jonathan Calazan "jonathan@calazan.com
 
 ENV PYTHONUNBUFFERED 1
 
-RUN apt-get -y update && apt-get install -y \
-    libav-tools \
-    libpq-dev
+RUN apt-get install -qq -y \
+    ffmpeg \
+    libpq-dev \
+    postgresql-client \
 
 # Service
 EXPOSE 80
