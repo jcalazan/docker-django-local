@@ -10,5 +10,9 @@ RUN apt-get install -qq -y \
     libpq-dev \
     postgresql-client
 
+RUN ln -s /usr/lib/x86_64-linux-gnu/libjpeg.so /usr/lib
+RUN ln -s /usr/lib/x86_64-linux-gnu/libfreetype.so /usr/lib
+RUN ln -s /usr/lib/x86_64-linux-gnu/libz.so /usr/lib
+
 # Service
 EXPOSE 80
