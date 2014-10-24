@@ -5,8 +5,10 @@ ENV PYTHONUNBUFFERED 1
 
 RUN apt-get install -qq -y \
     ffmpeg \
+    libjpeg-dev \
+    libpng-dev \
     libpq-dev \
-    postgresql-client \
+    postgresql-client
 
 # Service
 EXPOSE 80
