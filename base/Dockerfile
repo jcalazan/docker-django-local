@@ -1,13 +1,13 @@
 FROM ubuntu:12.04
 MAINTAINER Jonathan Calazan "jonathan@calazan.com
 
-RUN apt-get -y update && apt-get install -y \
+RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
     git \
-    sudo \
-    vim \
     python-dev \
     python-pip \
     python-pycurl \
-    python-software-properties
+    python-software-properties \
+    sudo \
+    vim
