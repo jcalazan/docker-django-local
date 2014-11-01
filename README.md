@@ -32,6 +32,38 @@ This repo is configured for automated builds.
 
 ## Sample ```fig``` Configuration
 
+```
+postgresql:
+  image: jcalazan/postgresql
+  environment:
+    - POSTGRESQL_DB=calazanblog
+    - POSTGRESQL_USER=calazanblog
+    - POSTGRESQL_PASSWORD=password
+  volumes:
+    - /dockerfiles/calazan-blog/postgresql:/var/lib/postgresql
+  ports:
+    - "5432:5432"
+
+django:
+  image: jcalazan/django
+  environment:
+    - DJANGO_SETTINGS_MODULE=calazanblog.settings.local
+    - DATABASE_NAME=calazanblog
+    - DATABASE_USER=calazanblog
+    - DATABASE_PASSWORD=password
+    - DATABASE_HOST=postgresql
+  working_dir: /calazan-blog
+  command: >
+    bash -c "sleep 2 && python manage.py runserver 0.0.0.0:80"
+  volumes:
+    - /dockerfiles/calazan-blog/python:/usr/local/lib/python2.7
+    - ../calazan-blog:/calazan-blog
+  ports:
+    - "80:80"
+  links:
+    - postgresql:postgresql
+```
+
 ## Resources
 
 - https://registry.hub.docker.com/u/orchardup/postgresql/
