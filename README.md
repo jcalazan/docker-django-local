@@ -53,8 +53,7 @@ django:
     - DATABASE_PASSWORD=password
     - DATABASE_HOST=postgresql
   working_dir: /calazan-blog
-  command: >
-    bash -c "sleep 2 && python manage.py runserver 0.0.0.0:80"
+  command: bash -c "sleep 2 && python manage.py runserver 0.0.0.0:80"
   volumes:
     - /dockerfiles/calazan-blog/python:/usr/local/lib/python2.7
     - ../calazan-blog:/calazan-blog
