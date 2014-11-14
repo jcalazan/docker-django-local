@@ -61,7 +61,7 @@ django:
   ports:
     - "80:80"
   links:
-    - postgresql:postgresql
+    - postgresql
 ```
 
 ## Resources
