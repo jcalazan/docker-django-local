@@ -8,6 +8,8 @@ RUN apt-get update && apt-get install -qq -y \
     libjpeg-dev \
     libpng-dev \
     libpq-dev \
+    libxml2-dev \
+    libxslt1-dev \
     postgresql-client
 
 # Needed by 'pillow' package.
