@@ -1,5 +1,5 @@
 FROM jcalazan/base
-MAINTAINER Jonathan Calazan "jonathan@calazan.com
+MAINTAINER Jonathan Calazan "jonathan@calazan.com"
 
 ENV PYTHONUNBUFFERED 1
 

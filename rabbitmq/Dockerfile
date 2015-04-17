@@ -1,5 +1,5 @@
 FROM jcalazan/base
-MAINTAINER Jonathan Calazan "jonathan@calazan.com
+MAINTAINER Jonathan Calazan "jonathan@calazan.com"
 
 ADD rabbitmq-signing-key-public.asc /tmp/rabbitmq-signing-key-public.asc
 RUN apt-key add /tmp/rabbitmq-signing-key-public.asc
