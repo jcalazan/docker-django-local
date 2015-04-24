@@ -61,7 +61,8 @@ celery:
     - rabbitmq
 
 # NOTES:
-#   - The C_FORCE_ROOT variable allows celery to run as the root user.
+#   - The C_FORCE_ROOT variable allows celery to run as the root user. Don't do
+#     this in production.
 flower:
   image: jcalazan/django
   environment:
@@ -69,7 +70,7 @@ flower:
     - DATABASE_HOST=postgresql
     - BROKER_URL=amqp://guest:guest@rabbitmq//
   working_dir: /youtube-audio-dl
-  command: bash -c "celery -A youtubeadl flower --port=5555"
+  command: bash -c "sleep 3 && celery -A youtubeadl flower --port=5555"
   volumes:
     - /dockerfiles/youtube-audio-dl/python:/usr/local/lib/python2.7
     - /dockerfiles/youtube-audio-dl/bin:/usr/local/bin
@@ -104,3 +105,4 @@ django:
 - For the `youtube-audio-dl` project, the `manage.py` file is in the project root, that's why I set that path as the 'working_dir`.
 - You can run Django management commands inside the `django` container by prepending `fig run django` (e.g. `fig run django python manage.py migrate`).
 - By default, everything run as `root` in the Docker containers.
+- The `sleep` part in the command is to make sure the PostgreSQL service is ready to accept the connections before running a command that depends on it (see https://github.com/docker/compose/issues/374).
