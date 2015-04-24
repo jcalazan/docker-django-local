@@ -1,24 +1,20 @@
 docker-django-local
 ===================
 
-Status: Work in progress
-
 Dockerfiles to create images for use in local Django development environments.
 
-Designed to be used with [Fig](https://github.com/docker/fig), it will make things a lot easier.
+Designed to be used with [Docker Compose](https://docs.docker.com/compose/), it will make things a lot easier.
 
 I took most of these Dockerfiles from existing projects and modified them to work for my setup.
 
-## Images Info
+Here's a sample Django application that uses these Docker images: https://github.com/jcalazan/youtube-audio-dl
 
-**Note:** You should build the **base** image first as other images inherit from it.
+## Images Info
 
 - **base** - Ubuntu 12.04 with commonly used packages for Django/Python development.
 - **postgresql** - PostgreSQL 9.1 database (default username/password is docker/docker).
 - **django** - Not much difference from the base image except port 80 is exposed and contains a few additional packages/libraries.
 - **rabbitmq** - RabbitMQ message broker usually used with Celery. 
-
-More info in the role folders (coming soon).
 
 ## Docker Registry
 
@@ -26,43 +22,85 @@ You can pull these images directly from the Docker Registry: https://hub.docker.
 
 This repo is configured for automated builds.
 
-## Getting Started
-
-<coming soon>
-
-## Sample ```fig``` Configuration
+## Sample ```docker-compose.yml``` Configuration
 
 ```
 postgresql:
   image: jcalazan/postgresql
   environment:
-    - POSTGRESQL_DB=calazanblog
-    - POSTGRESQL_USER=calazanblog
+    - POSTGRESQL_DB=youtubeadl
+    - POSTGRESQL_USER=youtubeadl
     - POSTGRESQL_PASSWORD=password
   volumes:
-    - /dockerfiles/calazan-blog/postgresql:/var/lib/postgresql
+    - /dockerfiles/youtube-audio-dl/postgresql:/var/lib/postgresql
   ports:
     - "5432:5432"
+
+rabbitmq:
+  image: jcalazan/rabbitmq
+  ports:
+    - "15672:15672"
+
+# NOTES:
+#   - The C_FORCE_ROOT variable allows celery to run as the root user. Don't do
+#     this in production.
+celery:
+  image: jcalazan/django
+  environment:
+    - C_FORCE_ROOT=true
+    - DATABASE_HOST=postgresql
+    - BROKER_URL=amqp://guest:guest@rabbitmq//
+  working_dir: /youtube-audio-dl
+  command: bash -c "sleep 3 && celery -A youtubeadl worker -E -l info --concurrency=3"
+  volumes:
+    - /dockerfiles/youtube-audio-dl/python:/usr/local/lib/python2.7
+    - /dockerfiles/youtube-audio-dl/bin:/usr/local/bin
+    - ../youtube-audio-dl:/youtube-audio-dl
+  links:
+    - postgresql
+    - rabbitmq
+
+# NOTES:
+#   - The C_FORCE_ROOT variable allows celery to run as the root user.
+flower:
+  image: jcalazan/django
+  environment:
+    - C_FORCE_ROOT=true
+    - DATABASE_HOST=postgresql
+    - BROKER_URL=amqp://guest:guest@rabbitmq//
+  working_dir: /youtube-audio-dl
+  command: bash -c "celery -A youtubeadl flower --port=5555"
+  volumes:
+    - /dockerfiles/youtube-audio-dl/python:/usr/local/lib/python2.7
+    - /dockerfiles/youtube-audio-dl/bin:/usr/local/bin
+    - ../youtube-audio-dl:/youtube-audio-dl
+  ports:
+    - "5555:5555"
+  links:
+    - postgresql
+    - rabbitmq
 
 django:
   image: jcalazan/django
   environment:
-    - DJANGO_SETTINGS_MODULE=calazanblog.settings.local
-    - DATABASE_NAME=calazanblog
-    - DATABASE_USER=calazanblog
-    - DATABASE_PASSWORD=password
     - DATABASE_HOST=postgresql
-  working_dir: /calazan-blog
-  command: bash -c "sleep 2 && python manage.py runserver 0.0.0.0:80"
+    - BROKER_URL=amqp://guest:guest@rabbitmq//
+  working_dir: /youtube-audio-dl
+  command: bash -c "sleep 3 && python manage.py runserver_plus 0.0.0.0:80" 
   volumes:
-    - /dockerfiles/calazan-blog/python:/usr/local/lib/python2.7
-    - ../calazan-blog:/calazan-blog
+    - /dockerfiles/youtube-audio-dl/python:/usr/local/lib/python2.7
+    - /dockerfiles/youtube-audio-dl/bin:/usr/local/bin
+    - ../youtube-audio-dl:/youtube-audio-dl
   ports:
     - "80:80"
   links:
     - postgresql
+    - rabbitmq
 ```
 
-## Resources
+### A few things to note about this sample configuration:
 
-- https://registry.hub.docker.com/u/orchardup/postgresql/
+- Under `volumes:`, local directories are mapped to the containers.  It expects `docker-compose.yml` to be in the root project directory.  Python packages are also mapped from the local directory to make the image more reusable (i.e. no need to rebuild the images every time you add a new package to your project).
+- For the `youtube-audio-dl` project, the `manage.py` file is in the project root, that's why I set that path as the 'working_dir`.
+- You can run Django management commands inside the `django` container by prepending `fig run django` (e.g. `fig run django python manage.py migrate`).
+- By default, everything run as `root` in the Docker containers.
