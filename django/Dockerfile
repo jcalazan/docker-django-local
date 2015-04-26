@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -qq -y \
 
 # Needed by 'pillow' package.
 RUN ln -s /usr/lib/x86_64-linux-gnu/libjpeg.so /usr/lib
-RUN ln -s /usr/lib/x86_64-linux-gnu/libfreetype.so /usr/lib
+RUN ln -s /usr/lib/x86_64-linux-gnu/libfreetype.so.6 /usr/lib/libfreetype.so
 RUN ln -s /usr/lib/x86_64-linux-gnu/libz.so /usr/lib
 
 # Service
