@@ -32,7 +32,7 @@ postgresql:
     - POSTGRESQL_USER=youtubeadl
     - POSTGRESQL_PASSWORD=password
   volumes:
-    - /dockerfiles/youtube-audio-dl/postgresql:/var/lib/postgresql
+    - ~/dockerfiles/youtube-audio-dl/postgresql:/var/lib/postgresql
   ports:
     - "5432:5432"
 
@@ -42,8 +42,7 @@ rabbitmq:
     - "15672:15672"
 
 # NOTES:
-#   - The C_FORCE_ROOT variable allows celery to run as the root user. Don't do
-#     this in production.
+#   - The C_FORCE_ROOT variable allows celery to run as the root user.
 celery:
   image: jcalazan/django
   environment:
@@ -53,16 +52,15 @@ celery:
   working_dir: /youtube-audio-dl
   command: bash -c "sleep 3 && celery -A youtubeadl worker -E -l info --concurrency=3"
   volumes:
-    - /dockerfiles/youtube-audio-dl/python:/usr/local/lib/python2.7
-    - /dockerfiles/youtube-audio-dl/bin:/usr/local/bin
+    - ~/dockerfiles/youtube-audio-dl/python:/usr/local/lib/python2.7
+    - ~/dockerfiles/youtube-audio-dl/bin:/usr/local/bin
     - ../youtube-audio-dl:/youtube-audio-dl
   links:
     - postgresql
     - rabbitmq
 
 # NOTES:
-#   - The C_FORCE_ROOT variable allows celery to run as the root user. Don't do
-#     this in production.
+#   - The C_FORCE_ROOT variable allows celery to run as the root user.
 flower:
   image: jcalazan/django
   environment:
@@ -72,8 +70,8 @@ flower:
   working_dir: /youtube-audio-dl
   command: bash -c "sleep 3 && celery -A youtubeadl flower --port=5555"
   volumes:
-    - /dockerfiles/youtube-audio-dl/python:/usr/local/lib/python2.7
-    - /dockerfiles/youtube-audio-dl/bin:/usr/local/bin
+    - ~/dockerfiles/youtube-audio-dl/python:/usr/local/lib/python2.7
+    - ~/dockerfiles/youtube-audio-dl/bin:/usr/local/bin
     - ../youtube-audio-dl:/youtube-audio-dl
   ports:
     - "5555:5555"
@@ -89,8 +87,8 @@ django:
   working_dir: /youtube-audio-dl
   command: bash -c "sleep 3 && python manage.py runserver_plus 0.0.0.0:80" 
   volumes:
-    - /dockerfiles/youtube-audio-dl/python:/usr/local/lib/python2.7
-    - /dockerfiles/youtube-audio-dl/bin:/usr/local/bin
+    - ~/dockerfiles/youtube-audio-dl/python:/usr/local/lib/python2.7
+    - ~/dockerfiles/youtube-audio-dl/bin:/usr/local/bin
     - ../youtube-audio-dl:/youtube-audio-dl
   ports:
     - "80:80"
