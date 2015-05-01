@@ -52,9 +52,9 @@ celery:
   working_dir: /youtube-audio-dl
   command: bash -c "sleep 3 && celery -A youtubeadl worker -E -l info --concurrency=3"
   volumes:
+    - .:/youtube-audio-dl
     - ~/dockerfiles/youtube-audio-dl/python:/usr/local/lib/python2.7
     - ~/dockerfiles/youtube-audio-dl/bin:/usr/local/bin
-    - ../youtube-audio-dl:/youtube-audio-dl
   links:
     - postgresql
     - rabbitmq
@@ -70,9 +70,9 @@ flower:
   working_dir: /youtube-audio-dl
   command: bash -c "sleep 3 && celery -A youtubeadl flower --port=5555"
   volumes:
+    - .:/youtube-audio-dl
     - ~/dockerfiles/youtube-audio-dl/python:/usr/local/lib/python2.7
     - ~/dockerfiles/youtube-audio-dl/bin:/usr/local/bin
-    - ../youtube-audio-dl:/youtube-audio-dl
   ports:
     - "5555:5555"
   links:
@@ -87,9 +87,9 @@ django:
   working_dir: /youtube-audio-dl
   command: bash -c "sleep 3 && python manage.py runserver_plus 0.0.0.0:80" 
   volumes:
+    - .:/youtube-audio-dl
     - ~/dockerfiles/youtube-audio-dl/python:/usr/local/lib/python2.7
     - ~/dockerfiles/youtube-audio-dl/bin:/usr/local/bin
-    - ../youtube-audio-dl:/youtube-audio-dl
   ports:
     - "80:80"
   links:
