@@ -6,6 +6,7 @@ ENV PYTHONUNBUFFERED 1
 RUN apt-get update && apt-get install -qq -y \
     ffmpeg \
     libjpeg-dev \
+    libavcodec-extra-53 \
     libpng-dev \
     libpq-dev \
     libxml2-dev \
