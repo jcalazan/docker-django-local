@@ -1,4 +1,4 @@
-FROM ubuntu:12.04
+FROM ubuntu:14.04
 MAINTAINER Jonathan Calazan "jonathan@calazan.com"
 
 RUN apt-get update && apt-get install -y \

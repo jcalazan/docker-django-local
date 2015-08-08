@@ -4,8 +4,8 @@ MAINTAINER Jonathan Calazan "jonathan@calazan.com"
 RUN locale-gen en_US.UTF-8
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y -q \
-    postgresql-9.1 \
-    postgresql-contrib-9.1 \
+    postgresql-9.3 \
+    postgresql-contrib-9.3 \
     libpq-dev
 
 # /etc/ssl/private can't be accessed from within container for some reason
@@ -17,9 +17,9 @@ RUN mkdir /etc/ssl/private-copy; \
     chmod -R 0700 /etc/ssl/private; \
     chown -R postgres /etc/ssl/private
 
-ADD postgresql.conf /etc/postgresql/9.1/main/postgresql.conf
-ADD pg_hba.conf /etc/postgresql/9.1/main/pg_hba.conf
-RUN chown postgres:postgres /etc/postgresql/9.1/main/*.conf
+ADD postgresql.conf /etc/postgresql/9.3/main/postgresql.conf
+ADD pg_hba.conf /etc/postgresql/9.3/main/pg_hba.conf
+RUN chown postgres:postgres /etc/postgresql/9.3/main/*.conf
 ADD run.sh /usr/local/bin/run.sh
 RUN chmod +x /usr/local/bin/run.sh
 

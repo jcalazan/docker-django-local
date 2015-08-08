@@ -4,9 +4,9 @@ MAINTAINER Jonathan Calazan "jonathan@calazan.com"
 ENV PYTHONUNBUFFERED 1
 
 RUN apt-get update && apt-get install -qq -y \
-    ffmpeg \
+    libav-tools \
     libjpeg-dev \
-    libavcodec-extra-53 \
+    libavcodec-extra-54 \
     libpng-dev \
     libpq-dev \
     libxml2-dev \
