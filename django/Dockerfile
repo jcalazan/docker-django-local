@@ -6,7 +6,6 @@ ENV PYTHONUNBUFFERED 1
 RUN apt-get update && apt-get install -qq -y \
     libav-tools \
     libjpeg-dev \
-    libavcodec-extra-54 \
     libpng-dev \
     libpq-dev \
     libxml2-dev \
@@ -18,5 +17,5 @@ RUN ln -s /usr/lib/x86_64-linux-gnu/libjpeg.so /usr/lib
 RUN ln -s /usr/lib/x86_64-linux-gnu/libfreetype.so.6 /usr/lib/libfreetype.so
 RUN ln -s /usr/lib/x86_64-linux-gnu/libz.so /usr/lib
 
-# Service
+# Django service
 EXPOSE 80
