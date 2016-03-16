@@ -5,6 +5,8 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
     git \
+    libffi-dev \
+    libssl-dev \
     python-dev \
     python-pip \
     python-pycurl \
