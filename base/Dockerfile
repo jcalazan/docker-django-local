@@ -16,4 +16,7 @@ RUN apt-get update && apt-get install -y \
     vim
 
 # Install Python 3.5.
-RUN add-apt-repository ppa:fkrull/deadsnakes && apt-get update && apt-get install -y python3.5
+RUN add-apt-repository ppa:fkrull/deadsnakes && apt-get update && apt-get install -y \
+    python3.5 \
+    python3.5-dev \
+    python3-pip
