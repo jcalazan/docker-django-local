@@ -9,8 +9,8 @@ RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-k
 RUN apt-get update
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y -q \
-    postgresql-9.5 \
-    postgresql-contrib-9.5 \
+    postgresql-9.6 \
+    postgresql-contrib-9.6 \
     libpq-dev
 
 # /etc/ssl/private can't be accessed from within container for some reason
@@ -22,15 +22,15 @@ RUN mkdir /etc/ssl/private-copy; \
     chmod -R 0700 /etc/ssl/private; \
     chown -R postgres /etc/ssl/private
 
-ADD postgresql.conf /etc/postgresql/9.5/main/postgresql.conf
-ADD pg_hba.conf /etc/postgresql/9.5/main/pg_hba.conf
-RUN chown postgres:postgres /etc/postgresql/9.5/main/*.conf
+ADD postgresql.conf /etc/postgresql/9.6/main/postgresql.conf
+ADD pg_hba.conf /etc/postgresql/9.6/main/pg_hba.conf
+RUN chown postgres:postgres /etc/postgresql/9.6/main/*.conf
 ADD run.sh /usr/local/bin/run.sh
 RUN chmod +x /usr/local/bin/run.sh
 
-# Correct the Error: could not open temporary statistics file "/var/run/postgresql/9.5-main.pg_stat_tmp/global.tmp": No such file or directory
-RUN mkdir -p /var/run/postgresql/9.5-main.pg_stat_tmp
-RUN chown postgres:postgres /var/run/postgresql/9.5-main.pg_stat_tmp -R
+# Correct the Error: could not open temporary statistics file "/var/run/postgresql/9.6-main.pg_stat_tmp/global.tmp": No such file or directory
+RUN mkdir -p /var/run/postgresql/9.6-main.pg_stat_tmp
+RUN chown postgres:postgres /var/run/postgresql/9.6-main.pg_stat_tmp -R
 
 VOLUME ["/var/lib/postgresql"]
 EXPOSE 5432

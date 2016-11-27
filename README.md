@@ -12,7 +12,7 @@ Here's a sample Django application that uses these Docker images: https://github
 ## Images Info
 
 - **base** - Ubuntu 14.04 with commonly used packages for Django/Python development.
-- **postgresql** - PostgreSQL 9.5 database (default username/password is docker/docker).
+- **postgresql** - PostgreSQL 9.6 database (default username/password is docker/docker).
 - **django** - Not much difference from the base image except port 80 is exposed and contains a few additional packages/libraries.
 - **rabbitmq** - RabbitMQ message broker usually used with Celery. 
 
