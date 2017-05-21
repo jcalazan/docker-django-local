@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 MAINTAINER Jonathan Calazan "jonathan@calazan.com"
 
 RUN apt-get update && apt-get install -y \
@@ -16,8 +16,10 @@ RUN apt-get update && apt-get install -y \
     vim \
     wget
 
-# Install Python 3.5.
+# Install Python 3.x.
 RUN add-apt-repository ppa:fkrull/deadsnakes && apt-get update && apt-get install -y \
     python3.5 \
     python3.5-dev \
+    python3.6 \
+    python3.6-dev \
     python3-pip
