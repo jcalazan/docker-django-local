@@ -3,7 +3,7 @@ MAINTAINER Jonathan Calazan "jonathan@calazan.com"
 
 RUN locale-gen en_US.UTF-8
 
-RUN add-apt-repository "deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main"
+RUN add-apt-repository "deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main"
 RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 
 RUN apt-get update
