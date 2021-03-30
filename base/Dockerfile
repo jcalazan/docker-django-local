@@ -19,8 +19,9 @@ RUN apt-get update && apt-get install -y \
 
 # Install Python 3.x.
 RUN add-apt-repository ppa:fkrull/deadsnakes && apt-get update && apt-get install -y \
-    python3.5 \
-    python3.5-dev \
     python3.6 \
     python3.6-dev \
     python3-pip
+
+# Upgrade pip.
+RUN python3.6 -m pip install pip -U
