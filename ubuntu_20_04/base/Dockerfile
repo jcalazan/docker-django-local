@@ -24,7 +24,9 @@ RUN apt update && apt install -y \
     wget
 
 
-# Install python3.7.
+# Install python3.6 and python3.7.
 RUN add-apt-repository ppa:deadsnakes/ppa && apt install -y \
+    python3.6 \
+    python3.6-dev \
     python3.7 \
     python3.7-dev
