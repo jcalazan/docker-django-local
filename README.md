@@ -7,7 +7,6 @@ Designed to be used with [Docker Compose](https://docs.docker.com/compose/), it 
 
 I took most of these Dockerfiles from existing projects and modified them to work for my setup.
 
-Here's a sample Django application that uses these Docker images: https://github.com/jcalazan/youtube-audio-dl
 
 ## Images Info
 
@@ -16,86 +15,6 @@ Here's a sample Django application that uses these Docker images: https://github
 - **django** - Not much difference from the base image except port 80 is exposed and contains a few additional packages/libraries.
 - **rabbitmq** - RabbitMQ message broker usually used with Celery. 
 
-## Docker Registry
-
-You can pull these images directly from the Docker Registry: https://hub.docker.com/u/jcalazan/
-
-This repo is configured for automated builds.
-
-## Sample ```docker-compose.yml``` Configuration
-
-```
-postgresql:
-  image: jcalazan/postgresql
-  environment:
-    - POSTGRESQL_DB=youtubeadl
-    - POSTGRESQL_USER=youtubeadl
-    - POSTGRESQL_PASSWORD=password
-  volumes:
-    - ~/dockerfiles/youtube-audio-dl/postgresql:/var/lib/postgresql
-  ports:
-    - "5432:5432"
-
-rabbitmq:
-  image: jcalazan/rabbitmq
-  ports:
-    - "15672:15672"
-
-# NOTES:
-#   - The C_FORCE_ROOT variable allows celery to run as the root user.
-celery:
-  image: jcalazan/django
-  environment:
-    - C_FORCE_ROOT=true
-    - DATABASE_HOST=postgresql
-    - BROKER_URL=amqp://guest:guest@rabbitmq//
-  working_dir: /youtube-audio-dl
-  command: bash -c "sleep 3 && celery -A youtubeadl worker -E -l info --concurrency=3"
-  volumes:
-    - .:/youtube-audio-dl
-    - ~/dockerfiles/youtube-audio-dl/python:/usr/local/lib/python2.7
-    - ~/dockerfiles/youtube-audio-dl/bin:/usr/local/bin
-  links:
-    - postgresql
-    - rabbitmq
-
-# NOTES:
-#   - The C_FORCE_ROOT variable allows celery to run as the root user.
-flower:
-  image: jcalazan/django
-  environment:
-    - C_FORCE_ROOT=true
-    - DATABASE_HOST=postgresql
-    - BROKER_URL=amqp://guest:guest@rabbitmq//
-  working_dir: /youtube-audio-dl
-  command: bash -c "sleep 3 && celery -A youtubeadl flower --port=5555"
-  volumes:
-    - .:/youtube-audio-dl
-    - ~/dockerfiles/youtube-audio-dl/python:/usr/local/lib/python2.7
-    - ~/dockerfiles/youtube-audio-dl/bin:/usr/local/bin
-  ports:
-    - "5555:5555"
-  links:
-    - postgresql
-    - rabbitmq
-
-django:
-  image: jcalazan/django
-  environment:
-    - DATABASE_HOST=postgresql
-    - BROKER_URL=amqp://guest:guest@rabbitmq//
-  working_dir: /youtube-audio-dl
-  command: bash -c "sleep 3 && python manage.py runserver_plus 0.0.0.0:80" 
-  volumes:
-    - .:/youtube-audio-dl
-    - ~/dockerfiles/youtube-audio-dl/python:/usr/local/lib/python2.7
-    - ~/dockerfiles/youtube-audio-dl/bin:/usr/local/bin
-  ports:
-    - "80:80"
-  links:
-    - postgresql
-    - rabbitmq
-```
 
 #### A few things to note about this sample configuration:
 
